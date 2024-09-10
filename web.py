@@ -9,16 +9,19 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     def query_data(self):
         return dict(parse_qsl(self.url().query))
 
-    def do_GET(self):
-    if self.path == "/":
-        # Leer el contenido del archivo home.html
-        with open("home.html", "r") as file:
-            content = file.read()
+    contenido = {
+    '/': """<html><h1>Página de Inicio</h1></html>""",
+    '/proyecto/1': """<html><h1>Web Estática - App de recomendación de libros</h1></html>""",
+    '/proyecto/2': """<html><h1>Web App - MeFalta, que película o serie me falta ver</h1></html>""",
+    '/proyecto/3': """<html><h1>Web App - Foto22, web para gestión de fotos</h1></html>"""
+}
 
+def do_GET(self):
+    if self.path in contenido:
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
-        self.wfile.write(content.encode("utf-8"))
+        self.wfile.write(contenido[self.path].encode("utf-8"))
     else:
         self.send_response(404)
         self.send_header("Content-Type", "text/html")
