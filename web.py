@@ -10,21 +10,20 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         return dict(parse_qsl(self.url().query))
 
     def do_GET(self):
-    # Recoger los valores de los headers del request
-    host = self.headers.get('Host')
-    user_agent = self.headers.get('User-Agent')
+    if self.path == "/":
+        # Leer el contenido del archivo home.html
+        with open("home.html", "r") as file:
+            content = file.read()
 
-    # Responder con un código 200
-    self.send_response(200)
-
-    # Agregar los headers de la respuesta
-    self.send_header("Content-Type", "text/html")
-    self.send_header("Server", "CustomPythonServer")
-    self.send_header("Date", self.date_time_string())
-    self.end_headers()
-
-    # Escribir la respuesta en el cuerpo
-    self.wfile.write(self.get_response(host, user_agent).encode("utf-8"))
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html")
+        self.end_headers()
+        self.wfile.write(content.encode("utf-8"))
+    else:
+        self.send_response(404)
+        self.send_header("Content-Type", "text/html")
+        self.end_headers()
+        self.wfile.write("<h1>Error 404: Página no encontrada</h1>".encode("utf-8"))
 
 def get_response(self, host, user_agent):
     # Obtener la ruta y el query string
