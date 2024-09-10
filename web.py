@@ -27,17 +27,18 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     self.wfile.write(self.get_response(host, user_agent).encode("utf-8"))
 
 def get_response(self, host, user_agent):
+    # Obtener la ruta y el query string
+    query_data = self.query_data()
+    autor = query_data.get('autor', 'Luis Fernando Rodriguez Cruz')
+
+    # Retornar HTML dinámico
     return f"""
-    <h1> Hola Web </h1>
-    <h1> Made by Luis Fernando Rodriguez Cruz </h1>
-    <p> URL Parse Result : {self.url()} </p>
-    <p> Path Original: {self.path} </p>
-    <p> Headers: {self.headers} </p>
-    <p> Query: {self.query_data()} </p>
+    <h1>Proyecto: {self.url().path} Autor: {autor}</h1>
     <p> Host: {host} </p>
     <p> User-Agent: {user_agent} </p>
     """
-"""
+
+
 
 
 if __name__ == "__main__":
